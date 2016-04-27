@@ -258,7 +258,7 @@ ex_disable_uac_w7() {
   chk fatal $? "Could not mount ${tools_path}${deuac_iso}"
   log "Disabling UAC..."
   chk fatal $? "Could not start VM to disable UAC"
-  VBoxManage startvm "${vm_name}" --type headless
+  VBoxManage startvm "${vm_name}"
   chk fatal $? "Could not start VM to disable UAC"
   waiting 120
   check_shutdown
@@ -287,7 +287,7 @@ disable_uac() {
 # Start the VM; Wait some seconds afterwards to give the VM time to start up completely.
 start_vm() {
   log "Starting VM ${vm_name}..."
-  VBoxManage startvm "${vm_name}" --type headless
+  VBoxManage startvm "${vm_name}"
   chk fatal $? "Could not start VM"
   waiting 60
 }
@@ -447,7 +447,7 @@ install_selenium() {
   chk error $? "Could not install Selenium"
   log "Installing IEDriverServer..."
   #execute "VBoxManage guestcontrol \"${vm_name}\" copyto \"${selenium_path}IEDriverServer.exe\" C:/Windows/system32/ --username 'IEUser' --password 'Passw0rd!'"
-  copyto "IEDriverServer.exe" "${selenium_path}" "C:/selenium"
+  copyto "IEDriverServer.exe" "${selenium_path}" "C:/selenium/"
   chk error $? "Could not install IEDriverServer.exe"
   log "Configure Selenium..."
   execute_os_specific config_selenium
