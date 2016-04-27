@@ -192,6 +192,13 @@ ex_import_vm_xp() {
   chk fatal $? "Could not import VM"
 }
 
+# Increase VM Video Memory
+increase_vram_config() {
+  log "Increasing video memory to ${vm_vram}..."
+  execute "VBoxManage modifyvm \"${vm_name}\" --vram \"${vm_vram}\""
+  chk error $? "Could not increase video memory"
+}
+
 ex_import_vm_w7() {
   VBoxManage import "${appliance}" --vsys 0 --memory ${vm_mem}
   chk fatal $? "Could not import VM"
@@ -250,9 +257,10 @@ ex_disable_uac_w7() {
   VBoxManage storageattach "${vm_name}" --storagectl "IDE" --port 1 --device 0 --type dvddrive --medium "${tools_path}${deuac_iso}"
   chk fatal $? "Could not mount ${tools_path}${deuac_iso}"
   log "Disabling UAC..."
+  chk fatal $? "Could not start VM to disable UAC"
   VBoxManage startvm "${vm_name}" --type headless
   chk fatal $? "Could not start VM to disable UAC"
-  waiting 60
+  waiting 120
   check_shutdown
   log "Removing Disk..."
   VBoxManage storageattach "${vm_name}" --storagectl "IDE" --port 1 --device 0 --type dvddrive --medium none
@@ -312,7 +320,7 @@ disable_firewall() {
 
 # Create C:\Temp\; Most Functions who copy files to the VM are relying on this folder and will fail is he doesn't exists.
 create_temp_path() {
-  vm_temp="C:\\Temp\\"
+  vm_temp="C:/Temp/"
   log "Creating ${vm_temp}..."
   execute "VBoxManage guestcontrol \"${vm_name}\" createdirectory \"${vm_temp}\" --username 'IEUser' --password 'Passw0rd!'"
   chk fatal $? "Could not create ${vm_temp}"
@@ -343,33 +351,33 @@ install_java() {
 }
 
 # Install Firefox.
-install_firefox() {
-  log "Installing Firefox..."
-  copyto "${firefox_exe}" "${tools_path}" "${vm_temp}"
-  execute "VBoxManage guestcontrol \"${vm_name}\" execute --image \"${vm_temp}${firefox_exe}\" --username 'IEUser' --password 'Passw0rd!' -- /S"
-  chk error $? "Could not install Firefox"
-  waiting 120
-}
+#install_firefox() {
+#  log "Installing Firefox..."
+#  copyto "${firefox_exe}" "${tools_path}" "${vm_temp}"
+#  execute "VBoxManage guestcontrol \"${vm_name}\" execute --image \"${vm_temp}${firefox_exe}\" --username 'IEUser' --password 'Passw0rd!' -- /S"
+#  chk error $? "Could not install Firefox"
+#  waiting 120
+#}
 
 # Install Chrome-Driver for Selenium
-install_chrome_driver() {
-  log "Installing Chrome Driver..."
-  #execute "VBoxManage guestcontrol \"${vm_name}\" copyto \"${selenium_path}chromedriver.exe\" C:/Windows/system32/ --username 'IEUser' --password 'Passw0rd!'"
-  copyto chromedriver.exe "${selenium_path}" "C:/Windows/system32/"
-  chk error $? "Could not install Chrome Driver"
-  waiting 5
-}
+#install_chrome_driver() {
+#  log "Installing Chrome Driver..."
+#  #execute "VBoxManage guestcontrol \"${vm_name}\" copyto \"${selenium_path}chromedriver.exe\" C:/Windows/system32/ --username 'IEUser' --password 'Passw0rd!'"
+#  copyto chromedriver.exe "${selenium_path}" "C:/Windows/system32/"
+#  chk error $? "Could not install Chrome Driver"
+#  waiting 5
+#}
 
 # Install Chrome.
-install_chrome() {
-  log "Installing Chrome..."
-  #execute "VBoxManage guestcontrol \"${vm_name}\" copyto \"${tools_path}${chrome_exe}\" "${vm_temp}" --username 'IEUser' --password 'Passw0rd!'"
-  copyto "${chrome_exe}" "${tools_path}" "${vm_temp}"
-  execute "VBoxManage guestcontrol \"${vm_name}\" execute --image 'C:/Windows/System32/msiexec.exe' --username 'IEUser' --password 'Passw0rd!' -- /qn /i \"${vm_temp}${chrome_exe}\""
-  chk error $? "Could not install Chrome"
-  waiting 120
-  install_chrome_driver
-}
+#install_chrome() {
+#  log "Installing Chrome..."
+#  #execute "VBoxManage guestcontrol \"${vm_name}\" copyto \"${tools_path}${chrome_exe}\" "${vm_temp}" --username 'IEUser' --password 'Passw0rd!'"
+#  copyto "${chrome_exe}" "${tools_path}" "${vm_temp}"
+#  execute "VBoxManage guestcontrol \"${vm_name}\" execute --image 'C:/Windows/System32/msiexec.exe' --username 'IEUser' --password 'Passw0rd!' -- /qn /i \"${vm_temp}${chrome_exe}\""
+#  chk error $? "Could not install Chrome"
+#  waiting 120
+#  install_chrome_driver
+#}
 
 # Internal: Helper-Functions to Install Selenium (called by install_selenium)
 start_selenium_xp() {
@@ -439,7 +447,7 @@ install_selenium() {
   chk error $? "Could not install Selenium"
   log "Installing IEDriverServer..."
   #execute "VBoxManage guestcontrol \"${vm_name}\" copyto \"${selenium_path}IEDriverServer.exe\" C:/Windows/system32/ --username 'IEUser' --password 'Passw0rd!'"
-  copyto "IEDriverServer.exe" "${selenium_path}" "C:/Windows/system32/"
+  copyto "IEDriverServer.exe" "${selenium_path}" "C:/selenium"
   chk error $? "Could not install IEDriverServer.exe"
   log "Configure Selenium..."
   execute_os_specific config_selenium
@@ -581,6 +589,7 @@ activate_vm() {
 
 get_vm_info
 import_vm
+increase_vram_config
 set_network_config
 set_rdp_config
 disable_uac
@@ -590,8 +599,8 @@ create_temp_path
 rename_vm
 set_ie_config
 install_java
-install_firefox
-install_chrome
+#install_firefox
+#install_chrome
 install_selenium
 configure_clipboard
 activate_vm
