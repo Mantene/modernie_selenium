@@ -2,3 +2,4 @@ VMs/**/*.*
 Tools/*.exe
 Tools/*.iso
 .vagrant
+Vagrant
