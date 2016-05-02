@@ -1,0 +1,86 @@
+---
+
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - build-essential
+    - dkms
+    - unzip
+    - xfce4
+    - xfce4-goodies
+    - vnc4server
+    - git
+    - bsd-mailx
+
+- name: Add VirtualBox repo key
+  apt_key:
+    url: https://www.virtualbox.org/download/oracle_vbox.asc
+    state: present
+
+- name: Add VirtualBox repo
+  apt_repository:
+    repo: "deb http://download.virtualbox.org/virtualbox/debian {{ ansible_distribution_release }} contrib"
+    state: present
+    update_cache: yes
+
+- name: Install VirtualBox
+  apt:
+    name: virtualbox-4.3=4.3.38r106717
+    state: present
+
+- name: Check if extension pack is already installed
+  shell: "VBoxManage list extpacks"
+  register: extpack_list
+
+- name: Download VirtualBox extension pack
+  shell: "cd /tmp/ &&  wget http://download.virtualbox.org/virtualbox/4.3.38/Oracle_VM_VirtualBox_Extension_Pack-4.3.38-106717.vbox-extpack"
+  when: 'extpack_list.stdout == "Extension Packs: 0"'
+
+- name: Install VirtualBox extension pack
+  shell: "VBoxManage extpack install --replace /tmp/Oracle_VM_VirtualBox_Extension_Pack-4.3.38-106717.vbox-extpack"
+  when: 'extpack_list.stdout == "Extension Packs: 0"'
+
+- name: Copy the defult password file
+  template:
+    src: password.j2
+    dest: /tmp/file 
+
+- name: vncserver command
+  shell: "sudo -u {{ item.name }} -i vncserver </tmp/file >/tmp/vncpasswd.1 2>/tmp/vncpasswd.2"
+  with_items: "{{ vnc_users }}"
+
+- name: Copy the vncservers.conf file in /etc/ directory
+  template:
+    src: vncservers.conf.j2
+    dest: /etc/vncservers.conf
+    owner: root
+    group: root
+
+- name: Copy the modified "xstartup" file
+  template:
+    src: xstartup.j2
+    dest: "/home/{{ item.name }}/.vnc/xstartup"
+    mode: 0755
+  with_items: "{{ vnc_users }}"
+
+- name: Create a file vncserver in /etc/init.d/ directory
+  template:
+    src: vncserver.j2
+    dest: /etc/init.d/vncserver
+    owner: root
+    group: root
+    mode: 0755
+  register: vnc_service
+
+- name: Add vncserver service to default runlevels
+  command: "update-rc.d vncserver defaults"
+  when: vnc_service.changed
+
+- name: Restart VNC Service
+  service: 
+    name: vncserver 
+    pattern: /etc/init.d/vncserver
+    state: restarted
