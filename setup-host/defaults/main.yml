@@ -1,8 +1,4 @@
 ---
-ubuntu_vnc_packages:
-  - xfce4
-  - xfce4-goodies
-  - vnc4server
 default_passwd: password
 vnc_client_res: "1024x600"
 vnc_users:
