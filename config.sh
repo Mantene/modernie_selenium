@@ -23,6 +23,6 @@ selenium_path="$(pwd)/Tools/selenium_conf/"
 ie_cache_reg="ie_disablecache.reg"
 ie_protectedmode_reg="ie_protectedmode.reg"
 log_path=""
-vbox_user="${USER}"
+vbox_user="selenium"
 mailto="asgeir.bjarnason@storystream.it"
 create_snapshot=False
