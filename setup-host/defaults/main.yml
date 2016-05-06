@@ -1,6 +1,0 @@
----
-default_passwd: password
-vnc_client_res: "1024x600"
-vnc_users:
-  - name: 'user'
-    vnc_num: 1

@@ -1,6 +1,0 @@
----
-- hosts: webservers
-  become: yes
-  gather_facts: yes
-  roles:
-    - setup-host
