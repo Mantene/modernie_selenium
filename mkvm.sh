@@ -202,14 +202,14 @@ increase_vram_config() {
 # Disable VT-x/AMD-V (part 1)
 increase_vram_config() {
   log "Disable VT-x/AMD-V"
-  execute "VBoxManage modifyvm --hwvirtex off"
+  execute "VBoxManage modifyvm \"${vm_name}\" --hwvirtex off"
   chk error $? "Could not turn off VT-x/AMD-V"
 }
 
 # Disable VT-x/AMD-V (part 2)
 increase_vram_config() {
   log "Disable VT-x/AMD-V"
-  execute "VBoxManage modifyvm --vtxvpid off"
+  execute "VBoxManage modifyvm \"${vm_name}\" --vtxvpid off"
   chk error $? "Could not turn off VT-x/AMD-V"
 }
 
