@@ -199,6 +199,20 @@ increase_vram_config() {
   chk error $? "Could not increase video memory"
 }
 
+# Disable VT-x/AMD-V (part 1)
+increase_vram_config() {
+  log "Disable VT-x/AMD-V"
+  execute "VBoxManage modifyvm --hwvirtex off"
+  chk error $? "Could not turn off VT-x/AMD-V"
+}
+
+# Disable VT-x/AMD-V (part 2)
+increase_vram_config() {
+  log "Disable VT-x/AMD-V"
+  execute "VBoxManage modifyvm --vtxvpid off"
+  chk error $? "Could not turn off VT-x/AMD-V"
+}
+
 ex_import_vm_w7() {
   VBoxManage import "${appliance}" --vsys 0 --memory ${vm_mem}
   chk fatal $? "Could not import VM"
