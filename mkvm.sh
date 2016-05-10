@@ -4,7 +4,7 @@
 #set -x
 #set -e
 
-source config.sh
+source /home/selenium/modernie_selenium/config.sh
 
 # Basic-Checks.
 if [ "${1}" = "--help" ]; then
