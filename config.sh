@@ -13,13 +13,13 @@ else
   nic_bridge="eth0"
 fi
 
-vm_path="$(pwd)/VMs/"
+vm_path="/home/selenium/modernie_selenium/VMs/"
 vm_mem="768"
 vm_vram="50"
 vm_mem_xp="512"
 deuac_iso="deuac.iso"
-tools_path="$(pwd)/Tools/"
-selenium_path="$(pwd)/Tools/selenium_conf/"
+tools_path="/home/selenium/modernie_selenium/Tools/"
+selenium_path="/home/selenium/modernie_selenium/Tools/selenium_conf/"
 ie_cache_reg="ie_disablecache.reg"
 ie_protectedmode_reg="ie_protectedmode.reg"
 log_path=""
