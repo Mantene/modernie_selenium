@@ -1,6 +1,10 @@
 VMs/**/*.*
 Tools/*.exe
 Tools/*.iso
+Tools/selenium_conf/*.jar
+Tools/selenium_conf/*.exe
 .vagrant
 Vagrantfile
 *.retry
+*.log
+*.html
