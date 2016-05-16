@@ -1,5 +1,5 @@
 # Config; See readme for details.
-java_exe="jre-8u91-windows-i586.exe"
+java_exe="jre-8u92-windows-i586.exe"
 #firefox_exe="firefox.exe"
 #chrome_exe="chrome.exe"
 selenium_jar="selenium-server-standalone-2.53.0.jar"
