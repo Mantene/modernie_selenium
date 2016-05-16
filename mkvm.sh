@@ -360,7 +360,7 @@ install_java() {
   copyto "${java_exe}" "${tools_path}" "${vm_temp}"
   execute "VBoxManage guestcontrol \"${vm_name}\" execute --image \"${vm_temp}${java_exe}\" --username 'IEUser' --password 'Passw0rd!' -- /s"
   chk error $? "Could not install Java"
-  waiting 120
+  waiting 180
 }
 
 # Install Firefox.
