@@ -302,7 +302,7 @@ start_vm() {
   log "Starting VM ${vm_name}..."
   VBoxManage startvm "${vm_name}"
   chk fatal $? "Could not start VM"
-  waiting 60
+  waiting 240
 }
 
 update_guest_additions() {
