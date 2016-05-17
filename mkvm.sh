@@ -305,6 +305,14 @@ start_vm() {
   waiting 60
 }
 
+update_guest_additions() {
+  log "Updating Guest Additions on ${vm_name}.."
+  VBoxManage guestcontrol "${vm_name}" updateadditions --source /home/selenium/VBoxGuestAdditions_4.3.38.iso
+  chk fatal $? "Could not update Guest Additions"
+  waiting 60
+}
+
+
 # Internal: Helper-Functions to disable the Windows Firewall (called by disable_firewall)
 ex_disable_firewall_xp() {
   log "Disabling Windows XP Firewall..."
@@ -610,6 +618,7 @@ start_vm
 disable_firewall
 create_temp_path
 rename_vm
+#update_guest_additions
 set_ie_config
 install_java
 #install_firefox
