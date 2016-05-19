@@ -235,7 +235,7 @@ import_vm() {
 # Set VM Network-Config.
 set_network_config() {
   log "Setting network to NAT"
-  execute "VBoxManage modifyvm \"${vm_name}\" --nic1 nat
+  execute "VBoxManage modifyvm \"${vm_name}\" --nic1 nat"
   chk error $? "Could not set network to NAT"
 }
 
