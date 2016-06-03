@@ -302,7 +302,7 @@ start_vm() {
   log "Starting VM ${vm_name}..."
   VBoxManage startvm "${vm_name}"
   chk fatal $? "Could not start VM"
-  waiting 240
+  waiting 120
 }
 
 update_guest_additions() {
@@ -368,7 +368,7 @@ install_java() {
   copyto "${java_exe}" "${tools_path}" "${vm_temp}"
   execute "VBoxManage guestcontrol \"${vm_name}\" execute --image \"${vm_temp}${java_exe}\" --username 'IEUser' --password 'Passw0rd!' -- /s"
   chk error $? "Could not install Java"
-  waiting 180
+  waiting 120
 }
 
 # Install Firefox.
