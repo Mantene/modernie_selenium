@@ -1,6 +1,6 @@
 {
     "configuration": {
-        "port": 5555,
+        "port": 5557,
         "register": true,
         "registerCycle": 5000,
         "hubPort": 4444,
