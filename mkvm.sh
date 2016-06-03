@@ -235,7 +235,7 @@ import_vm() {
 # Set VM Network-Config.
 set_network_config() {
   log "Setting network bridge ${nic_bridge}..."
-  execute "VBoxManage modifyvm \"${vm_name}\" --nic1 bridged --bridgeadapter \"${nic_bridge}\""
+  execute "VBoxManage modifyvm \"${vm_name}\" --nic1 bridged --bridgeadapter1 \"${nic_bridge}\""
   chk error $? "Could not set bridge"
 }
 
