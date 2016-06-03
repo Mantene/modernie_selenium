@@ -234,9 +234,9 @@ import_vm() {
 
 # Set VM Network-Config.
 set_network_config() {
-  log "Setting network to NAT"
-  execute "VBoxManage modifyvm \"${vm_name}\" --nic1 nat"
-  chk error $? "Could not set network to NAT"
+  log "Setting network bridge ${nic_bridge}..."
+  execute "VBoxManage modifyvm \"${vm_name}\" --nic1 bridged --bridgeadapter \"${nic_bridge}\""
+  chk error $? "Could not set bridge"
 }
 
 # Find and set free Port for RDP-Connection.
