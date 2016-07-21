@@ -326,6 +326,18 @@ ex_disable_firewall_w7() {
   chk error $? "Could not disable Firewall"
 }
 
+set_static_ip() {
+  log "Setting a static IP"
+  execute "VBoxManage guestcontrol \"${vm_name}\" execute --image 'C:/windows/system32/netsh.exe' --username 'IEUser' --password 'Passw0rd!' -- interface ip set address name=\"Local Area Connection 2\" static 192.168.2.50 255.255.255.0 192.168.2.1"
+  chk error $? "Could not set a static IP"
+}
+
+set_dns() {
+ log "Setting a DNS"
+ execute "VBoxManage guestcontrol \"${vm_name}\" execute --image 'C:/windows/system32/netsh.exe' --username 'IEUser' --password 'Passw0rd!' -- interface ip set dns name=\"Local Area Connection 2\" static 192.168.2.1"
+ chk error $? "Could not set DNS"
+}
+
 ex_disable_firewall_wv() {
   ex_disable_firewall_w7
 }
@@ -616,6 +628,8 @@ set_rdp_config
 disable_uac
 start_vm
 disable_firewall
+set_static_ip
+set_dns
 create_temp_path
 rename_vm
 #update_guest_additions
