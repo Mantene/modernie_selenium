@@ -1,1 +1,1 @@
-"C:\Program Files\Java\jre1.8.0_91\bin\java.exe" -jar c:\selenium\selenium-server-standalone-2.53.0.jar -role node -nodeConfig c:\selenium\config.json -Dwebdriver.ie.driver=c:\selenium\IEDriverServer.exe
+"C:\Program Files\Java\jre1.8.0_65\bin\java.exe" -jar c:\selenium\selenium-server-standalone-2.53.1.jar -role node -nodeConfig c:\selenium\config.json -Dwebdriver.ie.driver=c:\selenium\IEDriverServer.exe

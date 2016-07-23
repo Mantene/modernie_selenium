@@ -236,8 +236,16 @@ import_vm() {
 set_network_config() {
   log "Setting network bridge ${nic_bridge}..."
   execute "VBoxManage modifyvm \"${vm_name}\" --nic1 bridged --bridgeadapter1 \"${nic_bridge}\""
-  chk error $? "Could not set bridge"
+  execute "VBoxManage modifyvm \"${vm_name}\" --nic2 nat"
+  chk error $? "Could not set bridge or add NAT card"
 }
+
+# Set VM Network-Config.
+#set_network_config() {
+#  log "Adding a NAT interface"
+#  execute "VBoxManage modifyvm \"${vm_name}\" --nic2 nat"
+#  chk error $? "Could not set NAT interface"
+#}
 
 # Find and set free Port for RDP-Connection.
 set_rdp_config() {
@@ -307,7 +315,7 @@ start_vm() {
 
 update_guest_additions() {
   log "Updating Guest Additions on ${vm_name}.."
-  VBoxManage guestcontrol "${vm_name}" updateadditions --source /home/selenium/VBoxGuestAdditions_4.3.38.iso
+  VBoxManage guestcontrol "${vm_name}" updateadditions --source /home/storystream/VBoxGuestAdditions_4.3.38.iso
   chk fatal $? "Could not update Guest Additions"
   waiting 60
 }
@@ -327,8 +335,26 @@ ex_disable_firewall_w7() {
 }
 
 set_static_ip() {
+  case ${vm_name} in
+    IE8*Win7*)
+      static_ip=192.168.2.50
+    ;;
+    IE9*Win7*)
+      static_ip=192.168.2.51
+    ;;
+    IE10*Win7*)
+      static_ip=192.168.2.52
+    ;;
+    IE11*Win7*)
+      static_ip=192.168.2.53
+    ;;
+    *)
+      chk skip 1 "Could not find hostname, skip static ip allocation..."
+      return 1
+    ;;
+  esac
   log "Setting a static IP"
-  execute "VBoxManage guestcontrol \"${vm_name}\" execute --image 'C:/windows/system32/netsh.exe' --username 'IEUser' --password 'Passw0rd!' -- interface ip set address name=\"Local Area Connection 2\" static 192.168.2.50 255.255.255.0 192.168.2.1"
+  execute "VBoxManage guestcontrol \"${vm_name}\" execute --image 'C:/windows/system32/netsh.exe' --username 'IEUser' --password 'Passw0rd!' -- interface ip set address name=\"Local Area Connection 2\" static ${static_ip} 255.255.255.0 192.168.2.1"
   chk error $? "Could not set a static IP"
 }
 
