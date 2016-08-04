@@ -257,7 +257,7 @@ ex_disable_uac_w7() {
   VBoxManage storageattach "${vm_name}" --storagectl "IDE" --port 1 --device 0 --type dvddrive --medium "${tools_path}${deuac_iso}"
   chk fatal $? "Could not mount ${tools_path}${deuac_iso}"
   log "Disabling UAC..."
-  VBoxManage startvm "${vm_name}"
+  VBoxManage startvm "${vm_name}" --type headless
   chk fatal $? "Could not start VM to disable UAC"
   waiting 90
   check_shutdown
@@ -278,7 +278,7 @@ disable_uac() {
 # Start the VM; Wait some seconds afterwards to give the VM time to start up completely.
 start_vm() {
   log "Starting VM ${vm_name}..."
-  VBoxManage startvm "${vm_name}"
+  VBoxManage startvm "${vm_name}" --type headless
   chk fatal $? "Could not start VM"
   waiting 120
 }
