@@ -14,7 +14,7 @@ else
 fi
 
 vm_path="/home/storystream/modernie_selenium/VMs/"
-vm_mem="2048"
+vm_mem="3200"
 vm_vram="50"
 vm_mem_xp="512"
 deuac_iso="deuac.iso"
