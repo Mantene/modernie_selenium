@@ -283,13 +283,6 @@ start_vm() {
   waiting 120
 }
 
-update_guest_additions() {
-  log "Updating Guest Additions on ${vm_name}.."
-  VBoxManage guestcontrol "${vm_name}" updateadditions --source /home/storystream/VBoxGuestAdditions_4.3.38.iso
-  chk fatal $? "Could not update Guest Additions"
-  waiting 60
-}
-
 ex_disable_firewall_w7() {
   log "Disabling Windows Firewall..."
   execute "VBoxManage guestcontrol \"${vm_name}\" execute --image 'C:/windows/system32/netsh.exe' --username 'IEUser' --password 'Passw0rd!' -- advfirewall set allprofiles state off"
@@ -532,7 +525,6 @@ set_static_ip
 set_dns
 create_temp_path
 rename_vm
-#update_guest_additions
 set_ie_config
 install_java
 install_selenium
